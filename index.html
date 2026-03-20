@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KCE Event Hub</title>
+    <style>
+        /* --- CSS VARIABLES (For easy Light/Dark Mode) --- */
+        :root {
+            --primary-color: #6366f1; 
+            --primary-hover: #4f46e5;
+            --bg-color: #f9fafb;
+            --nav-bg: #ffffff;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        /* Dark Mode Variables */
+        body.dark-mode {
+            --bg-color: #111827;
+            --nav-bg: #1f2937;
+            --card-bg: #1f2937;
+            --text-main: #f9fafb;
+            --text-light: #9ca3af;
+            --border-color: #374151;
+            --shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s; /* Smooth dark mode transition */
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* Navigation (Sticky) */
+        nav {
+            background-color: var(--nav-bg);
+            padding: 1rem 5%;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* LOGO STYLE */
+        .logo-img {
+            height: 40px;
+            width: auto;
+            border-radius: 50%; /* Optional: makes logo circular */
+        }
+
+        nav h1 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Live Search Bar */
+        #searchInput {
+            padding: 8px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            outline: none;
+        }
+
+        #searchInput:focus {
+            border-color: var(--primary-color);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, var(--bg-color) 100%);
+        }
+
+        /* Event Grid */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 5%;
+        }
+
+        .grid {
+            display: grid;
+            /* Change auto-fit to auto-fill right here 👇 */
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .card-content { padding: 1.5rem; }
+        .card-title { font-size: 1.25rem; margin-bottom: 0.5rem; }
+        .card-date { color: var(--primary-color); font-weight: 600; font-size: 0.9rem; margin-bottom: 1rem; }
+        
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        /* Modals (Pop-ups) */
+        .modal-overlay {
+            display: none; 
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(3px); /* Cool blur effect */
+        }
+
+        .modal-box {
+            background: var(--card-bg);
+            color: var(--text-main);
+            padding: 2.5rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .modal-box input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            border-radius: 6px;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: -100px; /* Hidden initially */
+            right: 20px;
+            background: #10b981; /* Success Green */
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: bottom 0.4s ease;
+            z-index: 2000;
+        }
+        .toast.show { bottom: 20px; }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="brand-container">
+            <img src="C:\Users\mayu9\OneDrive\Pictures\Screenshots\coem_logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+            <h1>KCE Event Hub</h1>
+        </div>
+        
+        <div class="nav-controls">
+            <input type="text" id="searchInput" placeholder="Search events...">
+            <button class="theme-toggle" id="themeBtn">🌙</button>
+            <button class="btn-outline" id="loginBtn">Login / Staff</button>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h2 style="margin-bottom: 10px;">Discover Campus Events</h2>
+        <p>Find, register, and attend the best tech and cultural events at KCE-COEM,JALGAON .</p>
+    </header>
+
+    <main class="container">
+        <div class="grid" id="eventGrid">
+            <article class="card">
+                <img src="C:\Users\mayu9\Downloads\techfest.jpeg" alt="Techno Storm 2K26" class="card-img">
+                <div class="card-content">
+                    <h3 class="card-title">Techno Storm 2K26 -<br> UPCOMING 🕒</h3>
+                    <p class="card-date">📅 April 06, 2026</p>
+                    <p style="margin-bottom: 1rem; color: var(--text-light);">We are excited to invite students from your college to participate in our National Level Technical Event 🚀</p>
+                    <button class="btn register-btn" data-event="Tech Hackathon 2026">Register Now</button>
+                </div>
+            </article>
+
+
+            <article class="card">
+                <img src="D:\KCE Event Hub\yuvotsav.jpeg" alt="Yuvotsav 2K26" class="card-img">
+                <div class="card-content">
+                    <h3 class="card-title">Yuvotsav 2K26 -<br> ENDED 🚫</h3>
+                    <p class="card-date">📅 March 09-12, 2026</p>
+                    <p style="margin-bottom: 1rem; color: var(--text-light);">💫 Join us in the Upcoming Annual Carnival and stand a chance to win amazing prizes!</p>
+                    <button class="btn register-btn" data-event="Tech Hackathon 2026">Registration Closed !</button>
+                </div>
+            </article>
+
+             <article class="card">
+                <img src="D:\KCE Event Hub\sport.jpeg" alt="Sports Carnival 2K26" class="card-img">
+                <div class="card-content">
+                    <h3 class="card-title">Sports Carnival 2K26-<br> ENDED 🚫</h3>
+                    <p class="card-date">📅 March 05-10, 2026</p>
+                    <p style="margin-bottom: 1rem; color: var(--text-light);">🏅 Game On! You're Invited to Sports Carnival 2K26! Don't miss your chance to be a champion. Register now!</p>
+                    <button class="btn register-btn" data-event="Tech Hackathon 2026">Registration Closed !</button>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <div id="registrationModal" class="modal-overlay">
+        <div class="modal-box">
+            <span class="close-btn" onclick="closeModal('registrationModal')">&times;</span>
+            <h3 style="margin-bottom: 10px;">Register for Event</h3>
+            <p id="eventNameDisplay" style="margin-bottom: 1.5rem; color: var(--primary-color); font-weight: bold;"></p>
+            <form id="regForm">
+                <input type="text" id="studentName" placeholder="Full Name" required>
+                <input type="text" id="studentID" placeholder="Student ID (e.g. KCE123)" required>
+                <input type="email" id="studentEmail" placeholder="College Email" required>
+                <button type="submit" class="btn">Confirm Registration</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-box">
+            <span class="close-btn" onclick="closeModal('loginModal')">&times;</span>
+            <h3 style="margin-bottom: 1.5rem; text-align: center;">Coordinator Login</h3>
+            <form id="loginForm">
+                <input type="email" placeholder="Admin Email" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit" class="btn">Secure Login</button>
+            </form>
+            <p style="text-align: center; margin-top: 15px; font-size: 0.9rem; color: var(--text-light);">Students do not need to login to register.</p>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Success Message Here</div>
+
+    <script>
+        // --- Modal Logic ---
+        function openModal(modalId) { document.getElementById(modalId).style.display = 'flex'; }
+        function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
+
+        // Close if clicking outside the box
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                event.target.style.display = 'none';
+            }
+        });
+
+        // Trigger Registration Modal
+        document.querySelectorAll('.register-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.getElementById('eventNameDisplay').textContent = this.getAttribute('data-event');
+                openModal('registrationModal');
+            });
+        });
+
+        // Trigger Login Modal
+        document.getElementById('loginBtn').addEventListener('click', () => openModal('loginModal'));
+
+        // --- Toast Notification Logic ---
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 3000); // Hide after 3 seconds
+        }
+
+        // --- Form Submissions ---
+        document.getElementById('regForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('studentName').value;
+            showToast(`🎉 Registration successful for ${name}!`);
+            this.reset();
+            closeModal('registrationModal');
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showToast("🔑 Login feature coming soon!");
+            this.reset();
+            closeModal('loginModal');
+        });
+
+        // --- Live Search Filter ---
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.card');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('.card-title').textContent.toLowerCase();
+                if (title.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // --- Dark Mode Toggle ---
+        const themeBtn = document.getElementById('themeBtn');
+        
+        // Check if user previously saved dark mode
+        if(localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeBtn.textContent = '☀️';
+        }
+
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                themeBtn.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeBtn.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+    </script>
+</body>
+</html>
