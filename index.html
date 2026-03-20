@@ -347,14 +347,42 @@
             toast.classList.add('show');
             setTimeout(() => { toast.classList.remove('show'); }, 3000); // Hide after 3 seconds
         }
-
-        // --- Form Submissions ---
+        
+       // --- Form Submissions with Google Sheets ---
         document.getElementById('regForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const name = document.getElementById('studentName').value;
-            showToast(`🎉 Registration successful for ${name}!`);
-            this.reset();
-            closeModal('registrationModal');
+            e.preventDefault(); // Stop page from refreshing
+            
+            // 1. Change the button text so the user knows it's loading
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerText;
+            submitBtn.innerText = "Registering...";
+            
+            // 2. PASTE YOUR GOOGLE WEB APP URL HERE 👇
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwUm3P38C3S9PGupwAGe1u7pFtKI7JaWjjPbmJ3lGe4MI0Iwdxor4tTsExHywYhLbE7RA/exec'; 
+            
+            // 3. Gather the data
+            const formData = new FormData();
+            formData.append('EventName', document.getElementById('eventNameDisplay').innerText);
+            formData.append('StudentName', document.getElementById('studentName').value);
+            formData.append('StudentID', document.getElementById('studentID').value);
+            formData.append('Email', document.getElementById('studentEmail').value);
+
+            // 4. Send the data to Google Sheets
+            fetch(scriptURL, { method: 'POST', body: formData })
+                .then(response => {
+                    const name = document.getElementById('studentName').value;
+                    showToast(`🎉 Registration successful for ${name}!`);
+                    
+                    // Reset form and close modal
+                    document.getElementById('regForm').reset();
+                    closeModal('registrationModal');
+                    submitBtn.innerText = originalBtnText; // Reset button text
+                })
+                .catch(error => {
+                    console.error('Error!', error.message);
+                    showToast("❌ Something went wrong. Please try again.");
+                    submitBtn.innerText = originalBtnText;
+                });
         });
 
         document.getElementById('loginForm').addEventListener('submit', function(e) {
