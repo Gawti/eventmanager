@@ -338,30 +338,59 @@
 
     <main class="container">
         <div class="grid" id="eventGrid">
-           <article class="card hidden-card">
-                <img src="techfest.jpeg" alt="Techno Storm 2K26" class="card-img">
-                <div class="card-content">
-                    <h3 class="card-title">Techno Storm 2K26 -<br> UPCOMING 🕒 </h3>
-                    <p class="card-date">📅 April 06, 2026 | 9:30 AM</p>
-                    <p style="margin-bottom: 1rem; color: var(--text-light);">We are excited to invite students from your college to participate in our National Level Technical Event 🚀</p>
-                    
-                    <div class="countdown-timer" id="technoCountdown">
-                        <div class="time-box"><span id="days">00</span><small>Days</small></div>
-                        <div class="time-box"><span id="hours">00</span><small>Hours</small></div>
-                        <div class="time-box"><span id="mins">00</span><small>Mins</small></div>
-                        <div class="time-box"><span id="secs">00</span><small>Secs</small></div>
-                    </div>
 
-                    <div style="display: flex; gap: 8px; margin-top: 1rem;">
-                        <button class="btn register-btn" data-event="Techno Storm 2K26" style="flex: 1;">Register Now</button>
-                        <button class="btn-outline cal-btn" title="Add to Calendar" style="padding: 0.5rem 0.8rem; flex: 0 0 auto;" 
-                            data-title="Techno Storm 2K26" data-start="20260406T040000Z" data-end="20260406T123000Z" 
-                            data-desc="National Level Technical Event hosted at KCES COEM." data-loc="KCES COEM, Jalgaon">📅</button>
-                        <button class="btn-outline share-btn" title="Share Event" style="padding: 0.5rem 0.8rem; flex: 0 0 auto;" 
-                            data-title="Techno Storm 2K26" data-date="April 06, 2026" data-desc="National Level Technical Event at KCE-COEM.">🔗</button>
-                   </div>
-                </div>
-            </article>
+		<article class="card hidden-card">
+    <img src="bizintell.jpeg" alt="BIZINTELL 2026" class="card-img">
+    <div class="card-content">
+        <h3 class="card-title">BIZINTELL 2K26 -<br> UPCOMING 🕒 </h3>
+        <p class="card-date">📅 April 07, 2026 | 10:30 AM onwards</p>
+        <p style="margin-bottom: 1rem; color: var(--text-light); font-size: 0.9srem;">
+            🏆 Events: Battle of Ideas (Debate), Vision to Viral (Ad Mad), Brain Bizz (Quiz), & Lead and Win (Management Game). 
+            <br>
+        </p>
+        
+        <div class="countdown-timer" id="bizintellCountdown">
+            <div class="time-box"><span id="b-days">00</span><small>Days</small></div>
+            <div class="time-box"><span id="b-hours">00</span><small>Hours</small></div>
+            <div class="time-box"><span id="b-mins">00</span><small>Mins</small></div>
+            <div class="time-box"><span id="b-secs">00</span><small>Secs</small></div>
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-top: 1rem;">
+            <button class="btn register-btn" data-event="BIZINTELL 2026" style="flex: 1;">Register Now</button>
+            <button class="btn-outline cal-btn" title="Add to Calendar" style="padding: 0.5rem 0.8rem; flex: 0 0 auto;" 
+                data-title="BIZINTELL 2026" data-start="20260407T050000Z" data-end="20260407T110000Z" 
+                data-desc="University Level Management Event at KCES COEM MBA Dept." data-loc="COEM Campus, Jalgaon">📅</button>
+            <button class="btn-outline share-btn" title="Share Event" style="padding: 0.5rem 0.8rem; flex: 0 0 auto;" 
+                data-title="BIZINTELL 2026" data-date="April 07, 2026" data-desc="Show the world what it takes to be a Biz-whiz! Prizes up to 5000.">🔗</button>
+       </div>
+    </div>
+</article>
+
+           <article class="card hidden-card">
+    <img src="techfest.jpeg" alt="Techno Storm 2K26" class="card-img">
+    <div class="card-content">
+        <h3 class="card-title">Techno Storm 2K26 -<br> UPCOMING 🕒 </h3>
+        <p class="card-date">📅 April 06, 2026 | 9:30 AM</p>
+        <p style="margin-bottom: 1rem; color: var(--text-light);">We are excited to invite students from your college to participate in our National Level Technical Event 🚀</p>
+        
+        <div class="countdown-timer" id="technoCountdown">
+            <div class="time-box"><span id="days">00</span><small>Days</small></div>
+            <div class="time-box"><span id="hours">00</span><small>Hours</small></div>
+            <div class="time-box"><span id="mins">00</span><small>Mins</small></div>
+            <div class="time-box"><span id="secs">00</span><small>Secs</small></div>
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-top: 1rem;">
+            <button class="btn register-btn" data-event="Techno Storm 2K26" style="flex: 1;">Register Now</button>
+            <button class="btn-outline cal-btn" title="Add to Calendar" style="padding: 0.5rem 0.8rem; flex: 0 0 auto;" 
+                data-title="Techno Storm 2K26" data-start="20260407T040000Z" data-end="20260407T123000Z" 
+                data-desc="National Level Technical Event hosted at KCES COEM." data-loc="KCES COEM, Jalgaon">📅</button>
+            <button class="btn-outline share-btn" title="Share Event" style="padding: 0.5rem 0.8rem; flex: 0 0 auto;" 
+                data-title="Techno Storm 2K26" data-date="April 07, 2026" data-desc="National Level Technical Event at KCE-COEM.">🔗</button>
+       </div>
+    </div>
+</article>
 
             <article class="card hidden-card">
                 <img src="yuvotsav.jpeg" alt="Yuvotsav 2K26" class="card-img">
@@ -624,6 +653,29 @@
             document.getElementById("mins").innerText = minutes.toString().padStart(2, '0');
             document.getElementById("secs").innerText = seconds.toString().padStart(2, '0');
         }, 1000); // Updates every 1000 milliseconds (1 second)
+
+	// BIZINTELL Countdown Engine (Target: April 07, 2026, 10:30:00)
+const bizTarget = new Date("April 07, 2026 10:30:00").getTime();
+
+setInterval(() => {
+    const now = new Date().getTime();
+    const distance = bizTarget - now;
+
+    if (distance < 0) {
+        document.getElementById("bizintellCountdown").innerHTML = "🎉 Event is Live!";
+        return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    document.getElementById("b-days").innerText = days.toString().padStart(2, '0');
+    document.getElementById("b-hours").innerText = hours.toString().padStart(2, '0');
+    document.getElementById("b-mins").innerText = minutes.toString().padStart(2, '0');
+    document.getElementById("b-secs").innerText = seconds.toString().padStart(2, '0');
+}, 1000);
 
     </script>
 </body>
